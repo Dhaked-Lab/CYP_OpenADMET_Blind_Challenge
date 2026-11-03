@@ -1,0 +1,18 @@
+# Runtime dependencies for the CYP2D6 TDI pipeline (scripts/00 - scripts/11).
+# Versions are minimum versions, not exact pins. Step 08 of the pipeline and
+# scripts/00_environment_check.py record the versions actually installed.
+#
+# Development environment (from the logs of the original run): Python 3.12,
+# RDKit 2026.03.1, scikit-learn 1.9.1, LightGBM 4.7.0, XGBoost 3.4.1,
+# pandas 3.0.6, NumPy 2.5.3. The number of RDKit2D descriptors (217 in that
+# run) can differ between RDKit versions; install the same RDKit release to
+# reproduce the feature dimensionality exactly.
+
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+scipy>=1.10
+lightgbm>=4.0
+xgboost>=1.7
+rdkit>=2023.9.1
+PyYAML>=6.0

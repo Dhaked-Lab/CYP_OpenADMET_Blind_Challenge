@@ -1,0 +1,124 @@
+# RECONSTRUCTED_TEAMPOZESCAF_ALERTS
+#
+# STATUS: RECONSTRUCTION, NOT THE ORIGINAL TEAMPOZESCAF ALERTS.
+#
+# The TeamPozeSCAF methodology report (Section 1.3) states that 13
+# mechanism-based structural-alert binary features were used for the CYP2D6
+# pipeline, but does not give their SMARTS definitions, names, or source code.
+# A full-text search of every file in the TeamPozeSCAF report, the Jermy TDI
+# reproduction ZIP (all scripts, src/, configs, docs), and the four training
+# CSVs found no SMARTS patterns, alert names, or alert-generation code
+# anywhere. The original 13 definitions are therefore UNAVAILABLE.
+#
+# This file defines 13 REPLACEMENT alerts, chosen independently,
+# each representing a chemical motif well documented in the pharmacology /
+# medicinal-chemistry literature as a mechanism-based (time-dependent) CYP
+# inactivator pharmacophore. They are a reasonable reconstruction of "the
+# kind of thing" a 13-alert CYP-TDI alert set would contain, NOT a recovery
+# of TeamPozeSCAF's actual features. Do not present model results derived
+# from these alerts as reproducing TeamPozeSCAF's original reported numbers.
+#
+# Every SMARTS pattern is written for RDKit (Chem.MolFromSmarts) and was
+# sanity-checked for parseability against known example molecules in
+# 03_structural_alerts.py's self-test.
+
+alerts:
+  - name: FURAN_RING
+    smarts: "c1ccoc1"
+    rationale: >
+      Furan rings undergo CYP-mediated epoxidation to a reactive
+      cis-enedial/epoxide that can alkylate the heme or apoprotein
+      (classic furanocoumarin-type mechanism-based inactivation, e.g.
+      furafylline analogs).
+
+  - name: THIOPHENE_RING
+    smarts: "c1ccsc1"
+    rationale: >
+      Thiophene S-oxidation generates a reactive sulfoxide/thiophene-S-oxide
+      that can covalently modify the enzyme; a well-documented TDI liability
+      in drug design (e.g. tienilic acid class).
+
+  - name: TERMINAL_ALKYNE
+    smarts: "[#6][C]#[CH]"
+    rationale: >
+      Terminal acetylenes are oxidized by CYPs to reactive ketene/oxirene
+      intermediates that alkylate the heme prosthetic group -- one of the
+      best-characterized mechanism-based inactivator classes (e.g.
+      gestodene, mifepristone-type propargylamines).
+
+  - name: METHYLENEDIOXYPHENYL_MDP
+    smarts: "c1cc2c(cc1)OCO2"
+    rationale: >
+      The methylenedioxyphenyl (piperonyl-type) group is metabolically
+      activated to a carbene that forms a stable metabolic-intermediate
+      complex with the heme iron, a hallmark CYP3A4/CYP2D6 TDI motif
+      (e.g. paroxetine, MDMA).
+
+  - name: HYDRAZINE_OR_HYDRAZIDE
+    smarts: "[NX3][NX3]"
+    rationale: >
+      Hydrazines/hydrazides are oxidized to diazenyl and carbon-centered
+      radical species that covalently inactivate CYPs (e.g. iproniazid-type
+      mechanism-based inactivation).
+
+  - name: PRIMARY_AROMATIC_AMINE_ANILINE
+    smarts: "[NX3H2][c]"
+    rationale: >
+      Primary arylamines are N-oxidized to nitroso/nitrenium species capable
+      of protein/heme adduction; a recurrent TDI and idiosyncratic-toxicity
+      alert in medicinal chemistry alert sets.
+
+  - name: THIOUREA_OR_THIOAMIDE
+    smarts: "[#6][CX3](=[SX1])[#7]"
+    rationale: >
+      Thiocarbonyl sulfur is readily oxidized by CYPs to a reactive sulfine/
+      sulfenic intermediate that can inactivate the enzyme (e.g.
+      thioacetamide-type bioactivation).
+
+  - name: DIHYDROPYRIDINE_CORE
+    smarts: "C1=CC(C)NC(C)=C1"
+    rationale: >
+      1,4-Dihydropyridines (nifedipine-class calcium-channel blockers) are
+      aromatized by CYP3A4 with concomitant formation of a reactive pyridyl
+      radical/carbene that inactivates the enzyme.
+
+  - name: CYCLOPROPYLAMINE
+    smarts: "[NX3]C1CC1"
+    rationale: >
+      Cyclopropylamines undergo single-electron oxidation to a
+      ring-opened, highly reactive distonic radical cation that alkylates
+      the heme -- a classic mechanism-based-inactivator pharmacophore used
+      deliberately in some drug-design programs.
+
+  - name: NITROAROMATIC
+    smarts: "[c][NX3+](=O)[O-]"
+    rationale: >
+      Aromatic nitro groups are reduced/oxidized through nitroso and
+      hydroxylamine intermediates that can covalently modify CYP protein,
+      a well-known bioactivation/TDI liability flag.
+
+  - name: THIAZOLIDINEDIONE_CORE
+    smarts: "C1SC(=O)NC1=O"
+    rationale: >
+      The thiazolidinedione ring (glitazone class) undergoes ring-opening
+      bioactivation to reactive thioketene/sulfenic species implicated in
+      CYP time-dependent inhibition and hepatotoxicity.
+
+  - name: HYDRAZONE
+    smarts: "[#6]=N[NX3]"
+    rationale: >
+      Hydrazones can be oxidized to diazo/carbene-like reactive
+      intermediates analogous to hydrazides, supporting mechanism-based
+      enzyme inactivation.
+
+  - name: TERMINAL_VINYL_ALKENE
+    smarts: "[CH2]=[CH][#6]"
+    rationale: >
+      Terminal vinyl groups are epoxidized by CYPs to reactive alkene
+      oxides that can alkylate the heme or nearby nucleophilic residues
+      (e.g. vinyl-substituted mechanism-based inactivators).
+
+notes: >
+  These 13 alerts are implemented as independent binary (0/1) features -- a
+  molecule can trigger any number of them, including zero or more than one.
+  Feature order in the output matches the order of this list.

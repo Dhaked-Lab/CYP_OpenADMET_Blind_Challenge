@@ -1,0 +1,104 @@
+
+                   CYP2D6 TDI PIPELINE
+                            |
+                            v
+              +---------------------------+
+              | INPUT DATA                |
+              | Positive + Negative CSVs  |
+              | 1,497 molecules           |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 01: DATA AUDIT       |
+              | Validate SMILES and labels|
+              | Remove blank/invalid rows |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 02: FEATURES         |
+              | ECFP4 = 2,048              |
+              | RDKit2D = 217              |
+              | Total = 2,265              |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 03: STRUCTURAL ALERTS|
+              | 13 reconstructed alerts  |
+              | Binary features = 13      |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | FEATURE MATRIX            |
+              | 2,048 + 217 + 13          |
+              | TOTAL = 2,278 FEATURES    |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 04: SCAFFOLD FOLDS   |
+              | Murcko scaffold grouping  |
+              | 5 folds, seed = 7         |
+              | Scaffold leakage check    |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 05: MODEL TRAINING   |
+              | 5-fold OOF predictions    |
+              | Final full-data refit     |
+              +---------------------------+
+                            |
+             +--------------+--------------+
+             |              |              |
+             v              v              v
+         Random Forest   Extra Trees    LightGBM
+             |              |              |
+             +--------------+--------------+
+                            |
+                            +---------- XGBoost
+                            |
+                            v
+              +---------------------------+
+              | EQUAL-WEIGHT ENSEMBLE     |
+              | (RF + ET + LGBM + XGB)/4  |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 06: THRESHOLD SEARCH |
+              | 0.10 to 0.90, step 0.02   |
+              | Select threshold by MCC   |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 07: OOF EVALUATION   |
+              | MCC, accuracy, precision  |
+              | recall and F1              |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 08: FINAL CHECK      |
+              | Models, features, folds   |
+              | Ensemble and threshold    |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | STEP 09: BLIND PREDICTION |
+              | Apply frozen threshold    |
+              | Never read blind labels   |
+              +---------------------------+
+                            |
+                            v
+              +---------------------------+
+              | FINAL CSV                 |
+              | Positive / Negative       |
+              | Per-model probabilities   |
+              | Ensemble probability      |
+              +---------------------------+
