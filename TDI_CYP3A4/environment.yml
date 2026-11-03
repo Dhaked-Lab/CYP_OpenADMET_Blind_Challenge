@@ -1,0 +1,14 @@
+name: cyp-tdi
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12          # tested on 3.12; pyproject declares >=3.10
+  - pip
+  - rdkit
+  - numpy
+  - pandas
+  - scikit-learn
+  - pyyaml
+  - pytest
+  # Install PyTorch separately BEFORE the pip step below (see README, "Installation"),
+  # then:  pip install -r requirements.txt

@@ -1,0 +1,96 @@
+# Effective defaults = the CORRECTED profile. The BASELINE profile (bottom) restores the
+# original JacksonBurns behaviour wherever a correction changes numbers.
+profile: corrected
+
+paths:
+  data_dir: data
+  output_dir: outputs
+  assets_dir: assets
+  cache_dir: cache            # shared, provenance-validated embedding cache
+
+seeds:                        # original seed values preserved; centralised here
+  folds: 7
+  lightgbm: 42
+  pca: 0
+  tabicl: 42
+  threshold_mc: 7
+  torch: 0
+  python: 0
+
+cv:
+  k: 5
+  none_bucket: 40
+  argsort_kind: legacy        # legacy = numpy default (original); stable = platform independent
+  fold_strategy: original_all_isoforms   # original_all_isoforms ([JB]: folds over all 6,145 training rows, then CYP3A4 rows) | cyp_only
+  fold_universe:              # used by original_all_isoforms: [JB] cyp-challenge@0fa9dd4 cache/X_train.parquet SMILES, drop_duplicates order
+    path: assets/reference/jb_fold_universe_smiles.csv
+    sha256: 3f52513c7a233fd9d186081c3642166e343ca390f60c06a21f52a3cfa95b9eff
+
+features:
+  morgan2_bits: 2048
+  morgan2_radius: 2
+  morgan3_bits: 1024
+  morgan3_radius: 3
+  maccs_bits: 167
+  allow_descriptor_mismatch: false   # fail if RDKit descriptor names/order differ from the JB cache
+
+nn_features:
+  mode: baseline              # baseline | drop_count | exclude_same_scaffold  (last two = optional experiments)
+  topk: 10
+  sim_threshold: 0.7
+
+lightgbm:
+  params:
+    n_estimators: 1200
+    learning_rate: 0.03
+    num_leaves: 63
+    min_child_samples: 15
+    subsample: 0.8
+    subsample_freq: 1
+    colsample_bytree: 0.5
+    reg_lambda: 2.0
+    verbosity: -1
+  deterministic: true         # adds deterministic=True, force_row_wise=True (corrected profile only)
+
+embeddings:
+  batch_size: 64
+  round_decimals: null        # optional noise-suppression experiment (not baseline)
+  torch_deterministic: true
+  safe_checkpoint_load: true  # try torch.load(weights_only=True) first
+
+pca:
+  n_components: 256
+  whiten: true
+  fold_scope: fold_train_only  # fold_train_only (corrected) | global_legacy (original, leaky)
+
+tabicl:
+  n_estimators: 4
+  checkpoint:                 # pinned; [JB] used TabICL's default. Verified equal to the original by OOF replay (docs/corrections_log.md JB-14)
+    hf_repo: jingang/TabICL
+    version: tabicl-classifier-v2-20260212.ckpt
+    sha256: bdc7dbd5e4ff21f8f0456fcf90c6b7cdf72dbea960f2d05b19bec19f9b3d4ed0
+
+ensemble:
+  members: [base, emb, tab, tabcp]
+  member_order: [base, emb, tab, extbase, tabcp, tabcpext]   # tie-break order (original insertion order)
+  greedy_rounds: 12
+  fracs: {start: 0.05, stop: 0.61, step: 0.01}
+
+threshold:
+  pi_multipliers: [0.7, 0.85, 1.0, 1.2, 1.5, 2.0]   # [RECON] flat prior, as in original
+  n_bins: 24
+  n_trials: 800
+  plateau_tolerance: 0.005
+  min_plateau: 3
+  fraction_override: null     # set a number to bypass threshold_selection (documented, never tuned on leaderboard)
+
+selection:
+  count_convention: exact_k   # exact_k (corrected) | legacy_k_plus_1 (original off-by-one)
+  tie_break: lowest_index     # score ties: lower row index wins (deterministic)
+
+profiles:
+  baseline:
+    cv: {argsort_kind: legacy}
+    lightgbm: {deterministic: false}
+    pca: {fold_scope: global_legacy}
+    selection: {count_convention: legacy_k_plus_1}

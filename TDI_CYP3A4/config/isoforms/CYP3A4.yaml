@@ -1,0 +1,16 @@
+isoform: CYP3A4
+label_column: CYP3A4_is_TDI
+id_column: Molecule_Name
+smiles_column: SMILES
+files:
+  positive: CYP3A4_Positive.csv
+  negative: CYP3A4_Negative.csv
+  combined: CYP3A4.csv        # alternative: one file with the label column
+  blind: TEST-BLINDED.csv
+submission:
+  columns: [Molecule_Name, SMILES, CYP3A4_is_TDI]
+  expected_rows: null         # null = must equal number of blind compounds
+reference_counts:             # informational (warnings only); NOT hard-coded requirements
+  n_positive: 764
+  n_negative: 2820
+  n_blind: 750

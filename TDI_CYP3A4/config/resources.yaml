@@ -1,0 +1,25 @@
+cpu:
+  threads: null               # null = library default; integer caps BLAS/OpenMP/LightGBM/torch threads
+gpu:
+  enabled: auto               # auto | true | false  (used by ChemProp/CheMeLeon embedding + TabICL only)
+  device_index: 0
+  required: false             # true => fail if GPU requested but CUDA unavailable
+parallel_jobs: 1              # cap for thread-level parallelism; steps themselves run sequentially
+step_resources:               # documentation + validation; LightGBM / RDKit never use the GPU
+  features: {gpu: none}
+  embeddings: {gpu: optional}
+  blind_embeddings: {gpu: optional}
+  oof_base: {gpu: none}
+  oof_emb: {gpu: none}
+  oof_tab: {gpu: optional}
+  oof_tabcp: {gpu: optional}
+  prediction: {gpu: optional}
+checkpoints:                  # external inputs, not distributed in this repository: place them at `path` (see assets/checkpoints/README.md); sha256-verified before every load
+  chemeleon_mp:
+    path: assets/checkpoints/chemeleon_mp.pt
+    sha256: c376624d3407204e780a0ed13a9ac097cc9bb1c13ef89cdbc633c1715c183651
+    source: "CheMeleon Foundation Model, Zenodo record 15460715 (DOI 10.5281/zenodo.15460715, v2, MIT license)"
+  chemprop_medium:
+    path: assets/checkpoints/chemprop_medium.pt
+    sha256: b8137a0d202669baa9747f21eac4ef78b000afe68a3f100d25c849c41ad8a3d5
+    source: "github.com/jeremycheminf/openadmet_scripts, CYP_Challenge/checkpoints/chemprop_medium.pt (third-party; license not verified)"

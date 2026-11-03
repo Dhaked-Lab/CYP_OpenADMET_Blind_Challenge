@@ -1,0 +1,18 @@
+# Runtime dependencies, taken from the imports in src/ and scripts/.
+# Pinned versions (lightgbm 4.7.*, chemprop 2.3.*, tabicl 2.2.0) are those declared by or verified against the original workflow;
+# the remaining packages were unpinned in the original and their exact versions for the reference run are unknown.
+# After installing, `python run_pipeline.py --isoform CYP3A4 --step features` fails fast if the installed RDKit's descriptor list
+# differs from the reference list (assets/reference/jb_descriptor_names.json).
+numpy
+pandas
+scikit-learn
+pyyaml
+rdkit
+lightgbm==4.7.*
+
+# CheMeleon / ChemProp-medium embeddings and TabICL members.
+# PyTorch is deliberately NOT listed: install ONE build first with the official selector command for your OS/Python/CUDA
+# (https://pytorch.org/get-started/locally/), then this file. Listing `torch` here lets pip replace a working CUDA build.
+chemprop==2.3.*
+tabicl==2.2.0              # its pretrained checkpoint is pinned separately (config/pipeline.yaml: tabicl.checkpoint)
+huggingface-hub            # used to read the pinned TabICL checkpoint from the local cache
