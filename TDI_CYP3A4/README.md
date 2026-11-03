@@ -192,14 +192,14 @@ Mocked pipeline tests use synthetic arrays and stub models and validate orchestr
 ## Known limitations
 * Second-order dependence of ensemble weights and fraction on the pooled OOF predictions (JB-08) is assessed but not corrected; reported nested OOF MCC should be read as mildly optimistic.
 * The prevalence prior behind the rank fraction is the original flat reconstruction; the fraction is not validated on blind labels.
-* Run-to-run variation can be reduced but not removed (JB-02).
+* Run-to-run variation can be reduced but not removed .
 * The descriptor count depends on RDKit; the check fails fast instead of adapting. Fold ids can differ under other numpy/RDKit versions: check `scaffold_cv/fold_report.json` (expected sizes 687/727/724/721/725).
 * Not covered: scripts 13-21 of the original (post-hoc analysis) and external-data variants.
 
 ## Acknowledgements and citation
 This pipeline re-implements the original CYP3A4 workflow by Jackson Burns and uses third-party pretrained models and libraries:
 * **CheMeleon**: Burns, J., Zalte, A., Green, W. *Descriptor-based Foundation Models for Molecular Property Prediction*, arXiv:2506.15792; model weights: Zenodo, DOI 10.5281/zenodo.15460715.
-* **ChemProp-medium** checkpoint from `github.com/jeremycheminf/openadmet_scripts`.
+* **ChemProp-medium** checkpoint from `github.com
 * **chemprop**, **TabICL**, **LightGBM**, **RDKit**, **scikit-learn**: please cite according to their own documentation.
 
 No license or `CITATION.cff` is included yet; see the publication checklist delivered with this repository.
