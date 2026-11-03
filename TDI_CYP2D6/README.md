@@ -376,11 +376,6 @@ full pipeline run on real data.
 No journal article or DOI is associated with this repository; a `CITATION.cff`
 file should be added by the authors once bibliographic information is final.
 
-This work builds on, and should acknowledge:
-
-- the **TeamPozeSCAF methodology report** (model architecture for CYP2D6),
-- the **"Jermy" TDI reproduction** (LightGBM configuration, feature and
-  threshold-search design),
 - the **OpenADMET CYP challenge** evaluation code vendored in `reference/`
   (source: <https://github.com/OpenADMET/CYP-Challenge-Tutorial>, commit
   `858ae63`, 2026-09-01; see `reference/VENDORED_FROM.txt`).
