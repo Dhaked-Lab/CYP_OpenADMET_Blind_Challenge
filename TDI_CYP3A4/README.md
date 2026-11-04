@@ -1,7 +1,6 @@
 # CYP3A4 TDI Pipeline
 
-A modular, resumable pipeline for classifying **time-dependent inhibition (TDI) of CYP3A4** from molecular structure. It is a
-re-implementation of the original JacksonBurns CYP3A4 workflow ("JB") that keeps the original methodology (features, 5-fold
+A modular, resumable pipeline for classifying **time-dependent inhibition (TDI) of CYP3A4** from molecular structure. features, 5-fold
 Murcko-scaffold cross-validation with seed 7, four ensemble members, nested greedy ensemble, rank-fraction selection) and corrects only
 defects that were confirmed against the original source (see [`docs/corrections_log.md`](docs/corrections_log.md)).
 
