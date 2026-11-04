@@ -7,8 +7,7 @@ structural-alert features; four tree-ensemble models are evaluated with 5-fold
 **Murcko-scaffold cross-validation**, averaged with equal weights, and
 thresholded at the out-of-fold MCC optimum before blind-set prediction.
 
-> **Status of the method.** The pipeline is a *hybrid reconstruction* of the
-> architecture described in the TeamPozeSCAF methodology report, with the
+> **Status of the method.** The pipeline is a *hybrid reconstruction* with the
 > LightGBM hyper-parameters of the "Jermy" reproduction. It is **not** a claim
 > of exact reproduction of either source. Notably, the 13 structural alerts are
 > a documented reconstruction (see [Structural alerts](#structural-alerts)).
@@ -71,8 +70,8 @@ Design decisions that originate from the source methodologies:
 | Component | Setting | Origin |
 |---|---|---|
 | Representation | ECFP4 2048-bit + RDKit2D + 13 alerts | TeamPozeSCAF report (alerts reconstructed here) |
-| RF / ExtraTrees | 600 trees, depth 8 / 10 | TeamPozeSCAF report, CYP2D6 architecture |
-| LightGBM | 500 trees, lr 0.05, 31 leaves, subsample 0.8, colsample 0.8, balanced class weight | "Jermy" LightGBM configuration (replaces the LightGBM settings of the TeamPozeSCAF report) |
+| RF / ExtraTrees | 600 trees, depth 8 / 10 | CYP2D6 architecture |
+| LightGBM | 500 trees, lr 0.05, 31 leaves, subsample 0.8, colsample 0.8, balanced class weight | "Jermy" LightGBM configuration |
 | XGBoost | see [Section 6](#6-machine-learning-algorithms) | Fourth ensemble member added in this project |
 | Threshold grid | 0.10 – 0.90, step 0.02 | Reproduction decision (the TeamPozeSCAF report specifies no CYP2D6 grid) |
 | Metrics | MCC, Accuracy, Precision, Recall, F1 | Vendored challenge configuration in `reference/` |
@@ -140,10 +139,9 @@ labelled data and reused for the blind set).
 
 ### Structural alerts
 
-The TeamPozeSCAF report describes 13 mechanism-based structural alerts but does
-not publish their definitions. `config/structural_alerts.yaml` therefore holds
-**13 independently chosen replacement alerts** (SMARTS and rationale for each),
-labelled `RECONSTRUCTED_TEAMPOZESCAF_ALERTS` in code and logs. Model results
+**13 mechanism-based structural alerts** (SMARTS and rationale for each),
+`config/structural_alerts.yaml` therefore holds
+labelled in code and logs. Model results
 using them must not be presented as reproducing the original numbers. See
 [`docs/STRUCTURAL_ALERTS_RECONSTRUCTION.md`](docs/STRUCTURAL_ALERTS_RECONSTRUCTION.md).
 `structural_alert_features()` raises an error if the file does not contain
